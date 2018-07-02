@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SVG Lines</title>
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script src="belay.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+
+  body{
+    background: #eee;
+  }
+  .grid{
+    padding: 30px;
+  }
+  .fact,.source, .child, .parent{
+    background: #fff;
+    margin: 10px 0px;
+    border-radius: 4px;
+    min-height: 30px;
+    padding: 10;
+  }
+  ol{
+    margin: 0;
+    padding: 0;
+
+  }
+  li{
+    list-style:none;
+    padding: 0;
+  }
+  h1,h2,h3{
+    margin-top:0;
+  }
+  li p{margin-bottom:0;}
+
+  </style>
+</head>
+<body>
+<div class="grid">
+<div class="row">
+<h1>Demo Elements Mapping </h1>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="text" id = "text_1">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+	
+  <div class="row">
+    <div class="col-sm-5">
+    <ol id="wives">
+    
+    </ol>
+    </div>
+    <div class="col-sm-2"></div>
+    <div class="col-sm-5">
+      <ol id="children">
+      </ol>
+    </div>
+  </div>
+</div>
+</body>
+
+<script>
+	
+
+function createList() {
+		for (var i = 0 ; i < 20 ; i++) {
+				var node = document.createElement("li");
+				var text_ = document.createTextNode("Text " + (i + 1));
+				//console.log(text_);
+				node.className = "parent";
+				node.id= ("parent_" + (i + 1));
+				node.append(text_);
+				document.getElementById("wives").appendChild(node);
+			} 
+	
+		for (var i = 0 ; i < 20 ; i++) {
+				var node = document.createElement("li");
+				var subtext = document.createTextNode("Subtext " + (i + 1));
+				//console.log(typeof(subtext));
+				node.className = "child";
+				node.id = ("child_"+ (i + 1));
+				node.append(subtext);
+				document.getElementById("children").appendChild(node);
+			}
+}
+createList();
+	
+var clickedElements = [];
+var clickedDictionary = {};
+var mapped = [];
+
+$(document).on('click', 'li', function () {
+	if ((clickedElements.length % 2 == 0 && this.className == "parent") || (clickedElements.length % 2 == 1 && this.className == "child")) {
+		clickedElements.push(this);
+		console.log(clickedElements[clickedElements.length -1].id," : ",this.textContent);
+		this.style.backgroundColor = "lightblue";
+	}
+	
+	if (clickedElements.length % 2 == 0 && clickedElements.length != 0) {
+		
+		var rand = Math.random() * .7 + .3;
+		Belay.set('animationDuration', rand);
+		Belay.on(clickedElements[clickedElements.length - 2], clickedElements[clickedElements.length - 1]);
+		clickedElements[clickedElements.length - 2].style.backgroundColor = "lightgreen";
+		clickedElements[clickedElements.length - 1].style.backgroundColor = "lightgreen";
+		var ab = clickedElements[clickedElements.length - 1].textContent;
+		clickedDictionary[ab] = clickedElements[clickedElements.length - 2].textContent;
+		
+		mapped.push(clickedDictionary[ab]);
+		console.log("hey:" ,mapped);
+		$('#exampleModal').modal('show');
+		
+	}
+});
+function drawConnectors(){
+	var rand = 0;
+	Belay.set('animationDuration', rand);
+	for (var i = 0 ; i < clickedElements.length ; i += 2) {
+		Belay.on(clickedElements[i], clickedElements[i + 1]);
+	}
+}
+
+
+// redraw if window is resized
+$(window).resize(function(){
+ 	Belay.off();
+	drawConnectors();
+});
+
+Belay.init({strokeWidth: 1});
+Belay.set('strokeColor', '#999');
+
+</script>
+
+
+</html>
