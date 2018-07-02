@@ -10,29 +10,29 @@
   <style>
 
   body{
-    background: #eee;
+	background: #eee;
   }
   .grid{
-    padding: 30px;
+	padding: 30px;
   }
   .fact,.source, .child, .parent{
-    background: #fff;
-    margin: 10px 0px;
-    border-radius: 4px;
-    min-height: 30px;
-    padding: 10;
+	background: #fff;
+	margin: 10px 0px;
+	border-radius: 4px;
+	min-height: 30px;
+	padding: 10;
   }
   ol{
-    margin: 0;
-    padding: 0;
+	margin: 0;
+	padding: 0;
 
   }
   li{
-    list-style:none;
-    padding: 0;
+	list-style:none;
+	padding: 0;
   }
   h1,h2,h3{
-    margin-top:0;
+	margin-top:0;
   }
   li p{margin-bottom:0;}
 
@@ -46,35 +46,36 @@
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <input type="text" id = "text_1">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
+	<div class="modal-content">
+	  <div class="modal-header">
+		<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		  <span aria-hidden="true">&times;</span>
+		</button>
+	  </div>
+	  <div class="modal-body">
+		<input type="text" id = "text_1">
+		<div id="selectedElements_show"> </div>
+	  </div>
+	  <div class="modal-footer">
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		<button type="button" class="btn btn-primary">Save changes</button>
+	  </div>
+	</div>
   </div>
 </div>
 	
   <div class="row">
-    <div class="col-sm-5">
-    <ol id="wives">
-    
-    </ol>
-    </div>
-    <div class="col-sm-2"></div>
-    <div class="col-sm-5">
-      <ol id="children">
-      </ol>
-    </div>
+	<div class="col-sm-5">
+	<ol id="wives">
+	
+	</ol>
+	</div>
+	<div class="col-sm-2"></div>
+	<div class="col-sm-5">
+	  <ol id="children">
+	  </ol>
+	</div>
   </div>
 </div>
 </body>
@@ -105,12 +106,44 @@ function createList() {
 }
 createList();
 	
-var clickedElements = [];
-var clickedDictionary = {};
-var mapped = [];
+var selectedElements = new Map();
+console.log("new Map created");
+var parent = null;
 
 $(document).on('click', 'li', function () {
-	if ((clickedElements.length % 2 == 0 && this.className == "parent") || (clickedElements.length % 2 == 1 && this.className == "child")) {
+	if (this.className == "parent") {
+		if (parent != null) {
+			parent.style.background = "white";
+		}
+		this.style.backgroundColor = "lightblue";
+		parent = this;
+	}
+	else if (parent != null && this.className == "child"){
+		var rand = Math.random() * .7 + .3;
+		Belay.set('animationDuration', rand);
+		Belay.on(parent, this);
+		parent.style.backgroundColor = "lightgreen";
+		this.style.backgroundColor = "lightgreen";
+
+		var child_text = this.textContent;
+		var parent_text = parent.textContent;
+
+		if (! (child_text in selectedElements)) {
+			selectedElements[child_text] = [];
+		}
+
+		selectedElements[child_text].push(parent_text);
+
+		console.log ("Array", JSON.stringify(selectedElements[child_text]));
+		document.getElementById('selectedElements_show').innerHTML = child_text + " " + JSON.stringify(selectedElements[child_text]);
+		$('#exampleModal').modal('show');
+		parent = null;
+	}
+	else {
+		alert("Please select a parent first");
+	}
+
+	/*if ((clickedElements.length % 2 == 0 && this.className == "parent") || (clickedElements.length % 2 == 1 && this.className == "child")) {
 		clickedElements.push(this);
 		console.log(clickedElements[clickedElements.length -1].id," : ",this.textContent);
 		this.style.backgroundColor = "lightblue";
@@ -123,27 +156,44 @@ $(document).on('click', 'li', function () {
 		Belay.on(clickedElements[clickedElements.length - 2], clickedElements[clickedElements.length - 1]);
 		clickedElements[clickedElements.length - 2].style.backgroundColor = "lightgreen";
 		clickedElements[clickedElements.length - 1].style.backgroundColor = "lightgreen";
+
 		var ab = clickedElements[clickedElements.length - 1].textContent;
+		var values_array = clickedDictionary[ab];
+		if (values_array == null) {
+			values_array = [];
+		} 
+		else {
+			values_array.push(clickedDictionary[ab]);
+		}
 		clickedDictionary[ab] = clickedElements[clickedElements.length - 2].textContent;
 		
 		mapped.push(clickedDictionary[ab]);
-		console.log("hey:" ,mapped);
+		// console.log("clickedDictionary", clickedDictionary);
+		Object.keys(clickedDictionary).forEach(function(key) {
+			console.log ("Element ::", key, clickedDictionary[key]);
+		}) ;	
+
+		document.getElementById('selectedElements_show').innerHTML += "<h4> " + ab + " : " + clickedDictionary[ab] + " </h4>";
+		// document.getElementById('selectedElements_show').innerHTML = clickedDictionary;
 		$('#exampleModal').modal('show');
-		
-	}
+	}*/
 });
 function drawConnectors(){
-	var rand = 0;
+	alert("Resize is under development");
+	/*var rand = 0;
 	Belay.set('animationDuration', rand);
 	for (var i = 0 ; i < clickedElements.length ; i += 2) {
 		Belay.on(clickedElements[i], clickedElements[i + 1]);
 	}
+	Object.keys(selectedElements).forEach(function (key, parents){
+		console.log(JSON.stringify(parents));
+	})*/
 }
 
 
 // redraw if window is resized
 $(window).resize(function(){
- 	Belay.off();
+	Belay.off();
 	drawConnectors();
 });
 
