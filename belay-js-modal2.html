@@ -8,13 +8,15 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <style>
 
-  body{
-    background: #eee;
-  }
+ 
   .grid{
     padding: 30px;
   }
-  .fact,.source, .child, .parent{
+.source { 
+  padding: 0.5em;
+  cursor: pointer; 
+}
+  .fact, .child, .parent{
     background: #fff;
     margin: 10px 0px;
     border-radius: 4px;
@@ -24,33 +26,37 @@
   ol{
     margin: 0;
     padding: 0;
-
+;
   }
   li{
     list-style:none;
     padding: 0;
+    
+
   }
   h1,h2,h3{
     margin-top:0;
   }
   li p{margin-bottom:0;}
-
-.modal-header {
-    padding:9px 15px;
-    border-bottom:1px solid #eee;
-    background-color: "lightblue";
-    -webkit-border-top-left-radius: 5px;
-    -webkit-border-top-right-radius: 5px;
-     border-top-left-radius: 5px;
-     border-top-right-radius: 5px;
- }
+BUTTON {
+	margin-top: 1px;
+    border: none;
+	background: rgb(0, 57, 93);
+    color: white;
+    
+    text-align: center;
+    font-size: 10px;
+    margin: 5.5px 0px;
+    border-radius: 4px;
+    min-height: 30.5px;
+    padding: 10;
+    
+}
   </style>
 </head>
 <body>
 <div class="grid">
-		<div class="row">
-		<h1>Demo Elements Mapping </h1>
-		</div>
+	
 		<!-- Modal Begin-->
 		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		  <div class="modal-dialog" role="document">
@@ -61,33 +67,33 @@
 			  </div>
 		<!-- Modal Body -->
 			  <div class="modal-body" >
-					<div id="selectedElements_parent"> </div>
-					<div id="selectedElements_child"></div>
-				  	
-				  		<!--select class="select picker">
-					  <optgroup label="Picnic">
-						<option>Mustard</option>
-						<option>Ketchup</option>
-						<option>Relish</option>
-					  </optgroup>
-					  <optgroup label="Camping">
-						<option>Tent</option>
-						<option>Flashlight</option>
-						<option>Toilet Paper</option>
-					  </optgroup>
-					</select>-->
-				  	<div class="dropdown">
-						<a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">
-						 <span id="selected">Chose option</span><span class="caret"></span></a>
-					  <ul class="dropdown-menu">
-						<li><a href="#">Option 1</a></li>
-						<li><a href="#">Option 2</a></li>
-						<li><a href="#">Option 3</a></li>
-						<li><a href="#">Option 4</a></li>
+				  <div class= "col-sm-3">
+					  <div class="source" id="selectedElements_parent">
+					  <ul>
 					  </ul>
-					</div>
+					  </div>
+				  </div>
+				  <div class="col-sm-6"> 
+					  <br>
+					<input id="dest">
+				  </div>
+				  <div class= "col-sm-3">
+					  
+					<div id="selectedElements_function" >
+					  <ul>
+					  </ul>
+					  </div>
+				  </div>
+				  <br>
+				  <br>
+				  	
+				  
 			  </div>
-		<!-- Modal Footer -->
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
 			  <div class="modal-footer">
 				<button type="button" class="btn btn-primary" data-dismiss="modal">Tranform</button>
 				<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -98,63 +104,128 @@
 		<!-- Modal End -->
 	
 	  <div class="row">
-			<div class="col-sm-5">
+			<div class="col-sm-4">
 				<ol id="wives">
 				</ol>
 				</div>
-			<div class="col-sm-2"></div>
-			<div class="col-sm-5">
+			<div class="col-sm-3"></div>
+			<div class="col-sm-4">
 			    <ol id="children">
 			    </ol>
 			</div>
+		  <div class="col-sm-1">
+			    <ol id="button_class">
+			    </ol>
+			</div>
+		 	
 	  </div>
 </div>
 </body>
 
 <script>
 	
-
+var dml_1 = ["Pid", "Pclass","Gender","Fare","Kid"];
+var dml_2 = ["PassengerId","PassengerClass","Gender","Price","Child"];
 function createList() {
-		for (var i = 0 ; i < 20 ; i++) {
+		for (var i = 0 ; i < dml_1.length ; i++) {
 				var node = document.createElement("li");
-				var text_ = document.createTextNode("Text " + (i + 1));
+				var text_ = document.createTextNode(dml_1[i]);
 				//console.log(text_);
 				node.className = "parent";
 				node.id= ("parent_" + (i + 1));
 				node.append(text_);
+				document.getElementById("wives").style.textAlign="center";
 				document.getElementById("wives").appendChild(node);
+				
+				document.getElementById(node.id).style.border="1px solid #00395d";
 			} 
 	
-		for (var i = 0 ; i < 20 ; i++) {
+		for (var i = 0 ; i < dml_2.length ; i++) {
 				var node = document.createElement("li");
-				var subtext = document.createTextNode("Subtext " + (i + 1));
+				var subtext = document.createTextNode(dml_2[i]);
 				//console.log(typeof(subtext));
 				node.className = "child";
 				node.id = ("child_"+ (i + 1));
 				node.append(subtext);
+				document.getElementById("children").style.borderColor="#00395d";
+				document.getElementById("children").style.textAlign="center";
 				document.getElementById("children").appendChild(node);
+				
+				document.getElementById(node.id).style.border="1px solid #00395d";
+			}
+		for (var i = 0 ; i < dml_2.length ; i++) {
+				var x = document.createElement("BUTTON");
+				x.append(document.createTextNode("Rule"));
+				x.id = ("button_"+ (i + 1));
+				//clickedElements[clickedElements.length - 1].appendChild(x);
+				x.style.color="white";
+				x.style.textAlign="center";
+				document.getElementById("button_class").appendChild(x);
+				
 			}
 }
-		createList();
+createList();
+var clickedElements = [];
+var myMap = new Map();
+var function_load = ["concat","substring","lrtrim"];
+var color_blue = "rgb(0, 174, 239)" ;
+var color_darkblue = "rgb(0, 57, 93)";
 
-		var clickedElements = [];
-		var myMap = new Map();
+//Automap
 
-		$(document).on('click', 'li', function () {
+var list1_length = dml_1.length;
+
+var list2_length = dml_2.length;
+var con_1 = document.getElementsByClassName("parent");
+var con_2 = document.getElementsByClassName("child");
+//console.log(list2_lenght, list1_lenght);
+//console.log(con_2);
+for(var i=0 ; i < list1_length; i++)
+	{
+		
+		for(var j=0 ; j < list2_length ; j++)
+			{	//console.log(con_1[i].textContent,con_2[i].textContent);
+				if(con_1[i].textContent == con_2[j].textContent)
+					{	//console.log("hey");
+						var rand = Math.random() * .7 + .3;
+						Belay.set('animationDuration', rand);
+						Belay.on(con_1[i],con_2[j]);
+					 	var iden = con_2[j].id;
+						iden = iden.split("_");
+						var k =iden[1];
+						console.log(iden);
+						
+						document.getElementById("button_"+(k)).disabled = true;
+						document.getElementById("button_"+(k)).style.color = "white";
+						
+						document.getElementById("button_"+(k)).style.backgroundColor = "lightgrey";
+						con_1[i].style.backgroundColor = color_darkblue ;
+						con_2[j].style.backgroundColor = color_darkblue;
+					 	con_1[i].style.color = "white" ;
+						con_2[j].style.color = "white";
+					 
+						
+						
+					}
+			}
+	}
+$(document).on('click', 'li', function () {
 			var flag=0;
 			if ((clickedElements.length % 2 == 0 && this.className == "parent") || (clickedElements.length % 2 == 1 && this.className == "child")) {
 				clickedElements.push(this);
-				//console.log(clickedElements[clickedElements.length -1].id," : ",this.textContent);
-				this.style.backgroundColor = "lightblue";
+				this.style.backgroundColor = color_blue;
+				console.log(this.style.backgroundColor);
+				this.style.color = "white";
 			}
 
-			if (clickedElements.length % 2 == 0 && clickedElements.length != 0 && clickedElements[clickedElements.length - 1].style.backgroundColor == "lightblue") {
+			if (clickedElements.length % 2 == 0 && clickedElements.length != 0 && clickedElements[clickedElements.length - 1].style.backgroundColor == color_blue) {
 
 				var rand = Math.random() * .7 + .3;
 				Belay.set('animationDuration', rand);
 				Belay.on(clickedElements[clickedElements.length - 2], clickedElements[clickedElements.length - 1]);
-				clickedElements[clickedElements.length - 2].style.backgroundColor = "lightgreen";
-				clickedElements[clickedElements.length - 1].style.backgroundColor = "lightgreen";
+				clickedElements[clickedElements.length - 2].style.backgroundColor = color_darkblue ;
+				clickedElements[clickedElements.length - 1].style.backgroundColor = color_darkblue;
+				
 				var child_text = this.textContent;
 				var parent_text =clickedElements[clickedElements.length - 2].textContent;
 				var lenghtclicked = clickedElements.length;
@@ -172,12 +243,35 @@ function createList() {
 							myMap[child_text] = [];
 						}
 						myMap[child_text].push(parent_text);
-						//console.log("lenght" , myMap[child_text]);
-						document.getElementById('selectedElements_parent').innerHTML = "<h5><b> " + child_text + "  </b></h6>";
-						document.getElementById('selectedElements_child').innerHTML = "<h5> " + myMap[child_text] + " </h5>";
 						var y = JSON.stringify(myMap[child_text]);
+						var t = "";
+						
+						document.getElementById("selectedElements_parent").innerHTML="";
+						for (var i=0;i<myMap[child_text].length;i++)
+							{
+								var node = document.createElement("li");
+								var text_ = document.createTextNode(myMap[child_text][i]);
+								//console.log(text_," : ",myMap[child_text][i])
+								node.className = "source";
+								node.append(text_);
+								document.getElementById("selectedElements_parent").appendChild(node);
+							}
+						
+						t= "";	
+					
+						document.getElementById("selectedElements_function").innerHTML="";
+						for (var i=0;i<function_load.length;i++)
+							{
+								var node = document.createElement("li");
+								var text_ = document.createTextNode(function_load[i]);
+								//console.log(text_," : ",myMap[child_text][i])
+								node.className = "source";
+								//node.id= ("parent_" + (i + 1));
+								node.append(text_);
+								document.getElementById("selectedElements_function").appendChild(node);
+							}
+						
 						flag=0;
-						//console.log(typeof(myMap[child_text]),myMap[child_text][0]);
 						$('#exampleModal').modal('show');
 				}
 				else
@@ -185,11 +279,36 @@ function createList() {
 						alert("Relationship already exist");
 					}
 			}
-			else if(this.style.backgroundColor == "lightgreen" && this.className == "child" ){
+			else if(this.style.backgroundColor == color_darkblue && this.className == "child" ){
 					var child_text = this.textContent;
-					document.getElementById('selectedElements_parent').innerHTML = "<h5><b> " + child_text + " <b> </h5>";
-					document.getElementById('selectedElements_child').innerHTML = "<h5> " + myMap[child_text] + " </h5>";
-					//console.log(typeof(myMap[child_text]),myMap[child_text][0]);
+						var t = "";
+						
+						document.getElementById("selectedElements_parent").innerHTML="";
+						for (var i=0;i<myMap[child_text].length;i++)
+							{
+								var node = document.createElement("li");
+								var text_ = document.createTextNode("Text " + i);
+								console.log(text_," : ",myMap[child_text][i])
+								node.className = "source";
+								node.id= ("parent_" + (i + 1));
+								node.append(text_);
+								document.getElementById("selectedElements_parent").appendChild(node);
+							}
+						
+						t= "";	
+						
+						document.getElementById("selectedElements_function").innerHTML="";
+						for (var i=0;i<function_load.length;i++)
+							{
+								var node = document.createElement("li");
+								var text_ = document.createTextNode(function_load[i]);
+								//console.log(text_," : ",myMap[child_text][i])
+								node.className = "source";
+								//node.id= ("parent_" + (i + 1));
+								node.append(text_);
+								document.getElementById("selectedElements_function").appendChild(node);
+							}
+						
 					$('#exampleModal').modal('show');
 					}
 		});
@@ -208,16 +327,16 @@ function createList() {
 			drawConnectors();
 		});
 
-		Belay.init({strokeWidth: 2});
-		Belay.set('strokeColor', '#999');
 </script>
-	
 <script>
-	 $('.dropdown-menu a').click(function(){
-		$('#selected').text($(this).text());
-		 console.log($(this).text());
-	  });
+const src = document.getElementsByClassName("source");
+document.getElementById("dest").innerHTML = "";
+const dest = document.getElementById("dest");
+
+
+$(document).on("dblclick", 'li', function () {
+	dest.value += " " + this.textContent
+});
+	
 </script>
-
-
 </html>
