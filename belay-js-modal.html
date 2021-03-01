@@ -10,29 +10,29 @@
   <style>
 
   body{
-    background: #eee;
+	background: #eee;
   }
   .grid{
-    padding: 30px;
+	padding: 30px;
   }
   .fact,.source, .child, .parent{
-    background: #fff;
-    margin: 10px 0px;
-    border-radius: 4px;
-    min-height: 30px;
-    padding: 10;
+	background: #fff;
+	margin: 10px 0px;
+	border-radius: 4px;
+	min-height: 30px;
+	padding: 10;
   }
   ol{
-    margin: 0;
-    padding: 0;
+	margin: 0;
+	padding: 0;
 
   }
   li{
-    list-style:none;
-    padding: 0;
+	list-style:none;
+	padding: 0;
   }
   h1,h2,h3{
-    margin-top:0;
+	margin-top:0;
   }
   li p{margin-bottom:0;}
 
@@ -46,35 +46,36 @@
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <input type="text" id = "text_1">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
+	<div class="modal-content">
+	  <div class="modal-header">
+		<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		  <span aria-hidden="true">&times;</span>
+		</button>
+	  </div>
+	  <div class="modal-body">
+		<input type="text" id = "text_1">
+		<div id="selectedElements_show"> </div>
+	  </div>
+	  <div class="modal-footer">
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		<button type="button" class="btn btn-primary">Save changes</button>
+	  </div>
+	</div>
   </div>
 </div>
 	
   <div class="row">
-    <div class="col-sm-5">
-    <ol id="wives">
-    
-    </ol>
-    </div>
-    <div class="col-sm-2"></div>
-    <div class="col-sm-5">
-      <ol id="children">
-      </ol>
-    </div>
+	<div class="col-sm-5">
+	<ol id="wives">
+	
+	</ol>
+	</div>
+	<div class="col-sm-2"></div>
+	<div class="col-sm-5">
+	  <ol id="children">
+	  </ol>
+	</div>
   </div>
 </div>
 </body>
@@ -127,9 +128,14 @@ $(document).on('click', 'li', function () {
 		clickedDictionary[ab] = clickedElements[clickedElements.length - 2].textContent;
 		
 		mapped.push(clickedDictionary[ab]);
-		console.log("hey:" ,mapped);
-		$('#exampleModal').modal('show');
+		// console.log("clickedDictionary", clickedDictionary);
+		Object.keys(clickedDictionary).forEach(function(key) {
+			console.log ("Element ::", key, clickedDictionary[key]);
+		}) ;	
 		
+		document.getElementById('selectedElements_show').innerHTML += "<h4> " + ab + " : " + clickedDictionary[ab] + " </h4>";
+		// document.getElementById('selectedElements_show').innerHTML = clickedDictionary;
+		$('#exampleModal').modal('show');
 	}
 });
 function drawConnectors(){
@@ -143,7 +149,7 @@ function drawConnectors(){
 
 // redraw if window is resized
 $(window).resize(function(){
- 	Belay.off();
+	Belay.off();
 	drawConnectors();
 });
 
